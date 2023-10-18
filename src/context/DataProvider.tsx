@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import StoreContext from '~/context/store';
-import { getBooks, getProducts } from '~/graphql';
+import { getProducts } from '~/graphql';
 import type { Book, Swag, ContentstackProduct } from '~/types/interfaces';
 
 interface Props {
@@ -22,6 +22,7 @@ function StoreProvider({ children }: Props) {
   const fetchSwag = async () => {
     if (!swag.length) {
       const response = await getProducts();
+      console.log(response)
       const products = response.map((product: ContentstackProduct) => {
         return {
           ...product,
