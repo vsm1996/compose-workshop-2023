@@ -5,6 +5,9 @@ import { Config, Context } from '@netlify/functions';
 // const sleep = async (ms: number) => await new Promise(fn => setTimeout(fn, ms));
 
 export default async (req: Request, context: Context) => {
+  const { id } = context.params;
+  console.log(`Looking up ${id || 'all books'}...`);
+
   const { slug } = context.params;
   console.log(`Looking up ${slug || 'all books'}...`);
 
@@ -34,6 +37,14 @@ export default async (req: Request, context: Context) => {
       return new Response('Not found', { status: 404, headers });
     }
     return Response.json(book, { headers });
+  }
+
+  if (id) {
+    const book = books.find(b => b.id === id);
+    if (!book) {
+      return new Response('Not found', { status: 404 });
+    }
+    return Response.json(book);
   }
 
   return Response.json(books, { headers });
